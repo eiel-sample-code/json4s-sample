@@ -7,7 +7,7 @@ import org.json4s.native.Serialization.write
 case class Case1(hogeId: Long, moguId: Int)
 
 // JSONとクラスでフィールド名が一致しない場合 & Long の場合Stringに
-object Case1 extends App {
+trait Case1Json {
   import FieldSerializer._
   val Case1FieldSerializer = FieldSerializer[Case1](
     renameTo("hogeId", "hoge_id") orElse renameTo("moguId", "mogu_id"),
@@ -22,9 +22,4 @@ object Case1 extends App {
 
   implicit val formats = DefaultFormats + Case1FieldSerializer + longCustomSerializer
 
-  val str = write(Case1(1L,2))
-  println(str)
-  var json = parse(str)
-  println(json \\ "hoge_id" == JString("1"))
-  println(json \\ "mogu_id" == JInt(2))
 }
